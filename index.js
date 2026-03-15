@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const morgan = require('morgan');
+const path = require('path');
 const session = require('express-session');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
@@ -46,9 +47,10 @@ app.use('/api/units', unitRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/notes', noteRoutes);
 
-// Basic Route
-app.get('/', (req, res) => {
-  res.json({ message: 'API do projeto CREOD está rodando!' });
+// Servir o frontend (opcional se express.static for suficiente, mas ajuda no roteamento)
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) return next();
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Start Server
