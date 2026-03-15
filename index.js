@@ -23,10 +23,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Session config
 app.use(session({
-  secret: process.env.SESSION_SECRET,
+  secret: process.env.SESSION_SECRET || 'creod-fallback-secret-key-123',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false } // Set to true if using HTTPS
+  cookie: { secure: process.env.NODE_ENV === 'production' } 
 }));
 
 // Initialize Passport
