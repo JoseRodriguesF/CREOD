@@ -8,20 +8,23 @@ const session = require('express-session');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
 
-// Import passport config
-require('./passport-config');
-
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Health Check (Antes de qualquer middleware)
+// 1. Servir arquivos estáticos PRIMEIRO
+app.use(express.static(path.join(__dirname, 'public')));
+
+// 2. Health Check
 app.get('/api/ping', (req, res) => res.send('pong'));
 
-// Middleware
+// 3. Middlewares
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 app.use(morgan('dev'));
+
+// Configuração do Passport (precisa vir DEPOIS dos middlewares básicos)
+require('./passport-config');
 
 // Session config
 app.use(session({
@@ -34,7 +37,6 @@ app.use(session({
   }
 }));
 
-// Initialize Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -45,7 +47,6 @@ const connectDB = async () => {
     return;
   }
   try {
-    // Definimos um timeout curto para evitar travar o boot da Vercel
     await mongoose.connect(process.env.MONGODB_URI, {
       serverSelectionTimeoutMS: 5000
     });
@@ -56,7 +57,7 @@ const connectDB = async () => {
 };
 connectDB();
 
-// Routes
+// 4. Rotas de API
 const unitRoutes = require('./routes/unitRoutes');
 const authRoutes = require('./routes/authRoutes');
 const noteRoutes = require('./routes/noteRoutes');
@@ -65,13 +66,10 @@ app.use('/api/units', unitRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/notes', noteRoutes);
 
-// Servir arquivos estáticos
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Fallback para o Frontend
+// 5. Fallback para o SPA (Frontend)
 app.get('*', (req, res, next) => {
-  // Se for uma rota de API que não existe, deixa passar para o handler de 404/erro
-  if (req.path.startsWith('/api')) return next();
+  // Se for uma requisição de arquivo (tem ponto), deixa passar para o 404
+  if (req.path.includes('.') || req.path.startsWith('/api')) return next();
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
