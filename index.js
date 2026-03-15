@@ -9,7 +9,7 @@ const passport = require('passport');
 const cookieParser = require('cookie-parser');
 
 // Import passport config
-require(path.join(__dirname, 'passport-config'));
+require('./passport-config');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -19,14 +19,16 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 app.use(morgan('dev'));
-app.use(express.static(path.join(__dirname, 'public')));
 
 // Session config
 app.use(session({
   secret: process.env.SESSION_SECRET || 'creod-fallback-secret-key-123',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: process.env.NODE_ENV === 'production' } 
+  cookie: { 
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax'
+  }
 }));
 
 // Initialize Passport
@@ -36,34 +38,41 @@ app.use(passport.session());
 // MongoDB Connection
 const connectDB = async () => {
   if (!process.env.MONGODB_URI) {
-    console.warn('⚠️ MONGODB_URI não encontrada. O banco de dados não será conectado.');
+    console.warn('⚠️ MONGODB_URI não encontrada.');
     return;
   }
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
+    // Definimos um timeout curto para evitar travar o boot da Vercel
+    await mongoose.connect(process.env.MONGODB_URI, {
+      serverSelectionTimeoutMS: 5000
+    });
     console.log('✅ Conectado ao MongoDB Atlas');
   } catch (err) {
-    console.error('❌ Erro ao conectar ao MongoDB:', err.message);
+    console.error('❌ Erro MongoDB:', err.message);
   }
 };
 connectDB();
 
 // Routes
-const unitRoutes = require(path.join(__dirname, 'routes', 'unitRoutes'));
-const authRoutes = require(path.join(__dirname, 'routes', 'authRoutes'));
-const noteRoutes = require(path.join(__dirname, 'routes', 'noteRoutes'));
+const unitRoutes = require('./routes/unitRoutes');
+const authRoutes = require('./routes/authRoutes');
+const noteRoutes = require('./routes/noteRoutes');
 
 app.use('/api/units', unitRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/notes', noteRoutes);
 
-// Servir o frontend (opcional se express.static for suficiente, mas ajuda no roteamento)
+// Servir arquivos estáticos
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Fallback para o Frontend
 app.get('*', (req, res, next) => {
+  // Se for uma rota de API que não existe, deixa passar para o handler de 404/erro
   if (req.path.startsWith('/api')) return next();
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Start Server
+// Start Server (somente local)
 if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => {
     console.log(`🚀 Servidor rodando na porta ${PORT}`);
