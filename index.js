@@ -14,6 +14,9 @@ require('./passport-config');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Health Check (Antes de qualquer middleware)
+app.get('/api/ping', (req, res) => res.send('pong'));
+
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
