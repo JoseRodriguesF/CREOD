@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>CREOD</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Auth View -->
+        <div id="auth-view" class="auth-container animate-fade">
+            <div class="logo-container">
+                <img src="/assets/logo.jpeg" alt="CREOD Logo">
+            </div>
+            <div class="auth-card">
+                <h1 class="auth-title">Bem-vindo à CREOD</h1>
+                <p class="auth-subtitle">Acesse sua conta para continuar</p>
+                <a href="/api/auth/google" class="google-btn">
+                    <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" width="20" alt="Google">
+                    Entrar com Google
+                </a>
+            </div>
+        </div>
+
+        <!-- Home View (Hidden by default) -->
+        <div id="home-view" style="display: none;">
+            <header class="header">
+                <img src="/assets/logo.jpeg" alt="CREOD Logo">
+                <button id="logout-btn" style="background:transparent; border:none; color:white;"><i class="fas fa-sign-out-alt"></i></button>
+            </header>
+
+            <main class="main-content">
+                <div id="page-inicio">
+                    <div class="tabs-selector">
+                        <button class="tab-btn active" data-tab="cronograma">Cronograma</button>
+                        <button class="tab-btn" data-tab="mapa">Mapa</button>
+                    </div>
+
+                    <div id="cronograma" class="tab-content active animate-fade">
+                        <div class="placeholder-view">
+                            <i class="fas fa-calendar-alt fa-2x mb-2"></i>
+                            <p>Seu Cronograma aparecerá aqui</p>
+                        </div>
+                    </div>
+
+                    <div id="mapa" class="tab-content animate-fade">
+                        <div class="placeholder-view">
+                            <i class="fas fa-map-marked-alt fa-2x mb-2"></i>
+                            <p>Mapa de Unidades</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="page-anotacoes" style="display: none;">
+                    <div class="chat-container">
+                        <div id="notes-list" class="chat-messages">
+                            <!-- Messages will appear here -->
+                        </div>
+                        <form id="note-form" class="chat-input-area">
+                            <input type="text" id="note-input" class="chat-input" placeholder="Escreva uma anotação..." required>
+                            <button type="submit" class="send-btn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </main>
+
+            <nav class="bottom-nav">
+                <a href="#" class="nav-item active" data-page="inicio">
+                    <i class="fas fa-home nav-icon"></i>
+                    <span>Início</span>
+                </a>
+                <a href="#" class="nav-item" data-page="anotacoes">
+                    <i class="fas fa-sticky-note nav-icon"></i>
+                    <span>Anotações</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>
