@@ -44,7 +44,7 @@ body {
 }
 
 .logo-container img {
-    width: 150px;
+    width: 220px;
     height: auto;
     margin-bottom: 2.5rem;
     pointer-events: none; /* Não interativo */
@@ -100,7 +100,7 @@ body {
 }
 
 .header img {
-    height: 35px;
+    height: 50px;
     pointer-events: none;
     user-select: none;
 }
