@@ -44,10 +44,13 @@ body {
 }
 
 .logo-container img {
-    width: 220px;
-    height: auto;
-    margin-bottom: 2.5rem;
-    pointer-events: none; /* Não interativo */
+    width: 200px;
+    height: 200px;
+    object-fit: cover; /* Faz o "corte" zoomando no centro */
+    object-position: center;
+    border-radius: 24px; /* Opcional: deixa com cara de ícone de app */
+    margin-bottom: 2rem;
+    pointer-events: none;
     user-select: none;
 }
 
@@ -100,7 +103,11 @@ body {
 }
 
 .header img {
+    width: 50px;
     height: 50px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 8px;
     pointer-events: none;
     user-select: none;
 }
