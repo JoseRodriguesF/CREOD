@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 app.use(morgan('dev'));
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Session config
 app.use(session({
@@ -34,9 +34,19 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('✅ Conectado ao MongoDB Atlas'))
-  .catch((err) => console.error('❌ Erro ao conectar ao MongoDB:', err));
+const connectDB = async () => {
+  if (!process.env.MONGODB_URI) {
+    console.warn('⚠️ MONGODB_URI não encontrada. O banco de dados não será conectado.');
+    return;
+  }
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('✅ Conectado ao MongoDB Atlas');
+  } catch (err) {
+    console.error('❌ Erro ao conectar ao MongoDB:', err.message);
+  }
+};
+connectDB();
 
 // Routes
 const unitRoutes = require('./routes/unitRoutes');
