@@ -9,7 +9,7 @@ const passport = require('passport');
 const cookieParser = require('cookie-parser');
 
 // Import passport config
-require('./passport-config');
+require(path.join(__dirname, 'passport-config'));
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -49,9 +49,9 @@ const connectDB = async () => {
 connectDB();
 
 // Routes
-const unitRoutes = require('./routes/unitRoutes');
-const authRoutes = require('./routes/authRoutes');
-const noteRoutes = require('./routes/noteRoutes');
+const unitRoutes = require(path.join(__dirname, 'routes', 'unitRoutes'));
+const authRoutes = require(path.join(__dirname, 'routes', 'authRoutes'));
+const noteRoutes = require(path.join(__dirname, 'routes', 'noteRoutes'));
 
 app.use('/api/units', unitRoutes);
 app.use('/api/auth', authRoutes);
