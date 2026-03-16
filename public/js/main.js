@@ -196,11 +196,49 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Notepad Logic (CRUD) ---
     const noteModal = document.getElementById('note-modal');
+    const dialogModal = document.getElementById('dialog-modal');
+    const dialogTitle = document.getElementById('dialog-title');
+    const dialogMessage = document.getElementById('dialog-message');
+    const dialogOkBtn = document.getElementById('dialog-ok-btn');
+    const dialogCancelBtn = document.getElementById('dialog-cancel-btn');
+    const dialogIcon = document.getElementById('dialog-icon');
+
     const noteTitleInput = document.getElementById('note-title-input');
     const noteContentInput = document.getElementById('note-content-input');
     const editNoteId = document.getElementById('edit-note-id');
     const notesGrid = document.getElementById('notes-grid');
     const modalTitleText = document.getElementById('modal-title-text');
+
+    function showDialog(title, message, type = 'alert') {
+        return new Promise((resolve) => {
+            dialogTitle.innerText = title;
+            dialogMessage.innerText = message;
+            dialogModal.style.display = 'flex';
+            dialogModal.classList.add('dialog-active');
+            
+            if (type === 'confirm') {
+                dialogCancelBtn.style.display = 'block';
+                dialogIcon.innerHTML = '<i class="fas fa-question-circle"></i>';
+            } else {
+                dialogCancelBtn.style.display = 'none';
+                dialogIcon.innerHTML = '<i class="fas fa-exclamation-circle"></i>';
+            }
+
+            const cleanup = (val) => {
+                dialogModal.style.display = 'none';
+                dialogModal.classList.remove('dialog-active');
+                dialogOkBtn.removeEventListener('click', okHandler);
+                dialogCancelBtn.removeEventListener('click', cancelHandler);
+                resolve(val);
+            };
+
+            const okHandler = () => cleanup(true);
+            const cancelHandler = () => cleanup(false);
+
+            dialogOkBtn.addEventListener('click', okHandler);
+            dialogCancelBtn.addEventListener('click', cancelHandler);
+        });
+    }
 
     document.getElementById('add-note-btn').addEventListener('click', () => {
         openModal();
@@ -277,7 +315,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const content = noteContentInput.value;
         const id = editNoteId.value;
 
-        if (!title || !content) return alert("Preencha título e conteúdo");
+        if (!title || !content) return showDialog("Atenção", "Preencha o título e o conteúdo da anotação.");
 
         try {
             const method = id ? 'PUT' : 'POST';
@@ -302,7 +340,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function deleteNote(id) {
-        if (!confirm("Deseja realmente excluir esta anotação?")) return;
+        const confirmed = await showDialog("Excluir", "Deseja realmente excluir esta anotação?", "confirm");
+        if (!confirmed) return;
+        
         try {
             const res = await fetch(`/api/notes/${id}`, {
                 method: 'DELETE',

@@ -340,13 +340,18 @@ body {
 .modal {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0,0,0,0.6);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     z-index: 1000;
     display: none;
     align-items: flex-end; /* Mobile feel */
     justify-content: center;
+}
+
+.modal.dialog-active {
+    align-items: center; /* Center alerts/confirms */
+    padding: 2rem;
 }
 
 .modal-content {
@@ -360,6 +365,26 @@ body {
     display: flex;
     flex-direction: column;
     height: 85vh;
+}
+
+.modal-content.dialog-content {
+    height: auto;
+    border-radius: 24px;
+    align-self: center; /* Center horizontally for dialogs */
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.dialog-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--accent-color);
+}
+
+.dialog-message {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    line-height: 1.5;
 }
 
 .modal-title {
