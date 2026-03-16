@@ -42,34 +42,71 @@
                     </div>
 
                     <div id="cronograma" class="tab-content active animate-fade">
-                        <table class="schedule-table">
-                            <thead>
-                                <tr>
-                                    <th>Horário</th>
-                                    <th>DeMolays:</th>
-                                    <th>Consultores:</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td class="schedule-time">07:00</td><td colspan="2">Credenciamento e Café da Manhã</td></tr>
-                                <tr><td class="schedule-time">08:30</td><td colspan="2">Abertura Ritualística</td></tr>
-                                <tr><td class="schedule-time">09:00</td><td colspan="2">Ordem dos Escudeiros</td></tr>
-                                <tr><td class="schedule-time">09:20</td><td colspan="2">Estrutura do Grande Conselho Estadual</td></tr>
-                                <tr><td class="schedule-time">09:30</td><td colspan="2">Situação da DeMolay SP</td></tr>
-                                <tr><td class="schedule-time">10:30</td><td>Sobre o Gabinete Estadual</td><td>Momento com a Diretoria Executiva</td></tr>
-                                <tr><td class="schedule-time">11:00</td><td>Alimentando uma Causa</td><td>Palestra sobre Honrarias e Prêmios</td></tr>
-                                <tr><td class="schedule-time">11:30</td><td>Momento sobre a Cavalaria</td><td>Legislação DeMolay</td></tr>
-                                <tr><td class="schedule-time">12:00</td><td colspan="2">Secretaria e Almoço</td></tr>
-                                <tr><td class="schedule-time">13:30</td><td>Quiz e Grande Capítulo</td><td>Estrutura da Ordem DeMolay</td></tr>
-                                <tr><td class="schedule-time">14:30</td><td colspan="2">Encerramento Ritualístico</td></tr>
-                                <tr><td class="schedule-time">15:00</td><td colspan="2">Entretenimento</td></tr>
-                                <tr><td class="schedule-time">16:00</td><td colspan="2">Café da Tarde</td></tr>
-                            </tbody>
-                        </table>
+                        <div class="sub-tabs-selector">
+                            <button class="sub-tab-btn active" data-subtab="demolay">DeMolay</button>
+                            <button class="sub-tab-btn" data-subtab="consultor">Consultor</button>
+                        </div>
+
+                        <div id="schedule-demolay" class="sub-tab-content active">
+                            <table class="schedule-table">
+                                <thead>
+                                    <tr>
+                                        <th>Horário</th>
+                                        <th>Atividade DeMolay</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="schedule-time">07:00</td><td>Credenciamento e Café da Manhã</td></tr>
+                                    <tr><td class="schedule-time">08:30</td><td>Abertura Ritualística</td></tr>
+                                    <tr><td class="schedule-time">09:00</td><td>Ordem dos Escudeiros</td></tr>
+                                    <tr><td class="schedule-time">09:20</td><td>Estrutura do Grande Conselho Estadual</td></tr>
+                                    <tr><td class="schedule-time">09:30</td><td>Situação da DeMolay SP</td></tr>
+                                    <tr><td class="schedule-time">10:30</td><td>Sobre o Gabinete Estadual</td></tr>
+                                    <tr><td class="schedule-time">11:00</td><td>Alimentando uma Causa</td></tr>
+                                    <tr><td class="schedule-time">11:30</td><td>Momento sobre a Cavalaria</td></tr>
+                                    <tr><td class="schedule-time">12:00</td><td>Secretaria e Almoço</td></tr>
+                                    <tr><td class="schedule-time">13:30</td><td>Quiz e Grande Capítulo</td></tr>
+                                    <tr><td class="schedule-time">14:30</td><td>Encerramento Ritualístico</td></tr>
+                                    <tr><td class="schedule-time">15:00</td><td>Entretenimento</td></tr>
+                                    <tr><td class="schedule-time">16:00</td><td>Café da Tarde</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="schedule-consultor" class="sub-tab-content">
+                            <table class="schedule-table">
+                                <thead>
+                                    <tr>
+                                        <th>Horário</th>
+                                        <th style="background: #31708f;">Atividade Consultor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="schedule-time">07:00</td><td>Credenciamento e Café da Manhã</td></tr>
+                                    <tr><td class="schedule-time">08:30</td><td>Abertura Ritualística</td></tr>
+                                    <tr><td class="schedule-time">09:00</td><td>Ordem dos Escudeiros</td></tr>
+                                    <tr><td class="schedule-time">09:20</td><td>Estrutura do Grande Conselho Estadual</td></tr>
+                                    <tr><td class="schedule-time">09:30</td><td>Situação da DeMolay SP</td></tr>
+                                    <tr><td class="schedule-time">10:30</td><td>Momento com a Diretoria Executiva</td></tr>
+                                    <tr><td class="schedule-time">11:00</td><td>Palestra sobre Honrarias e Prêmios</td></tr>
+                                    <tr><td class="schedule-time">11:30</td><td>Legislação DeMolay</td></tr>
+                                    <tr><td class="schedule-time">12:00</td><td>Secretaria e Almoço</td></tr>
+                                    <tr><td class="schedule-time">13:30</td><td>Estrutura da Ordem DeMolay</td></tr>
+                                    <tr><td class="schedule-time">14:30</td><td>Encerramento Ritualístico</td></tr>
+                                    <tr><td class="schedule-time">15:00</td><td>Entretenimento</td></tr>
+                                    <tr><td class="schedule-time">16:00</td><td>Café da Tarde</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     <div id="mapa" class="tab-content animate-fade">
-                        <div id="map"></div>
+                        <div class="map-container">
+                            <div id="map"></div>
+                            <a id="open-maps-btn" target="_blank" class="map-info-btn">
+                                <i class="fas fa-directions"></i> Ver no Google Maps
+                            </a>
+                        </div>
                     </div>
                 </div>
 

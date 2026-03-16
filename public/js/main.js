@@ -56,6 +56,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
+    // Sub-tab Switching (Cronograma)
+    const subTabBtns = document.querySelectorAll('.sub-tab-btn');
+    const subTabContents = document.querySelectorAll('.sub-tab-content');
+
+    subTabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetSubTab = btn.getAttribute('data-subtab');
+            subTabBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            subTabContents.forEach(content => {
+                content.classList.remove('active');
+                if (content.id === `schedule-${targetSubTab}`) content.classList.add('active');
+            });
+        });
+    });
+
     // Logout
     document.getElementById('logout-btn').addEventListener('click', () => {
         localStorage.removeItem('token');
@@ -86,11 +102,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.initMap = function() {
         const destination = "Av. Rubens Montanaro Borba n°477";
         const directionsService = new google.maps.DirectionsService();
-        const directionsRenderer = new google.maps.DirectionsRenderer();
+        const directionsRenderer = new google.maps.DirectionsRenderer({
+            suppressMarkers: true,
+            polylineOptions: {
+                strokeColor: "#ffffff",
+                strokeWeight: 5
+            }
+        });
+        const openMapsBtn = document.getElementById('open-maps-btn');
         
+        // Default Google Maps URL for the destination
+        openMapsBtn.href = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}`;
+
         const mapOptions = {
             zoom: 15,
-            center: { lat: -23.5505, lng: -46.6333 }, // São Paulo default
+            center: { lat: -23.4751, lng: -46.6669 }, // Approximate position for the address
+            disableDefaultUI: true,
+            zoomControl: true,
             styles: [ // Dark Mode Style
                 { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
                 { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
@@ -112,6 +140,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     lng: position.coords.longitude
                 };
 
+                // Update button with specific origin
+                openMapsBtn.href = `https://www.google.com/maps/dir/?api=1&origin=${pos.lat},${pos.lng}&destination=${encodeURIComponent(destination)}`;
+
                 directionsService.route({
                     origin: pos,
                     destination: destination,
@@ -119,22 +150,49 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }, (response, status) => {
                     if (status === "OK") {
                         directionsRenderer.setDirections(response);
+                        const leg = response.routes[0].legs[0];
+                        
+                        // Origin Marker
+                        new google.maps.Marker({
+                            position: leg.start_location,
+                            map: map,
+                            label: { text: "VOCÊ", color: "white", fontWeight: "bold" },
+                            title: "Sua Localização"
+                        });
+
+                        // Destination Marker
+                        new google.maps.Marker({
+                            position: leg.end_location,
+                            map: map,
+                            label: { text: "CREOD", color: "white", fontWeight: "bold" },
+                            title: "CREOD"
+                        });
                     } else {
                         console.error("Directions request failed due to " + status);
                     }
                 });
             }, () => {
-                // Geolocation failed, just show destination
-                const geocoder = new google.maps.Geocoder();
-                geocoder.geocode({ address: destination }, (results, status) => {
-                    if (status === "OK") {
-                        map.setCenter(results[0].geometry.location);
-                        new google.maps.Marker({ map, position: results[0].geometry.location });
-                    }
-                });
+                handleLocationError(map, destination);
             });
+        } else {
+            handleLocationError(map, destination);
         }
     };
+
+    function handleLocationError(map, destination) {
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ address: destination }, (results, status) => {
+            if (status === "OK") {
+                map.setCenter(results[0].geometry.location);
+                new google.maps.Marker({ 
+                    map, 
+                    position: results[0].geometry.location,
+                    label: { text: "CREOD", color: "white", fontWeight: "bold" },
+                    animation: google.maps.Animation.DROP
+                });
+            }
+        });
+    }
 
     // --- Notepad Logic (CRUD) ---
     const noteModal = document.getElementById('note-modal');
@@ -189,17 +247,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     function renderNote(note) {
         const card = document.createElement('div');
         card.className = 'note-card animate-fade';
+        card.style.cursor = 'pointer';
         card.innerHTML = `
             <div class="note-title">${note.title}</div>
-            <div class="note-content">${note.content}</div>
+            <div class="note-content-preview">${note.content}</div>
             <div class="note-actions">
-                <button class="action-btn edit-btn"><i class="fas fa-edit"></i> Editar</button>
                 <button class="action-btn delete delete-btn"><i class="fas fa-trash"></i> Excluir</button>
             </div>
         `;
 
-        card.querySelector('.edit-btn').addEventListener('click', () => openModal(note));
-        card.querySelector('.delete-btn').addEventListener('click', () => deleteNote(note._id));
+        // Click on the entire card to edit
+        card.addEventListener('click', (e) => {
+            // If the user clicked the delete button or its icon, don't open the modal
+            if (e.target.closest('.delete-btn')) return;
+            openModal(note);
+        });
+
+        // Delete button listener
+        card.querySelector('.delete-btn').addEventListener('click', (e) => {
+            e.stopPropagation(); // Stop event from bubbling to card click
+            deleteNote(note._id);
+        });
 
         notesGrid.appendChild(card);
     }

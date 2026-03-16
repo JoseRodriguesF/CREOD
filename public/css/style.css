@@ -154,6 +154,45 @@ body {
     display: block;
 }
 
+/* Sub Tabs (Schedule) */
+.sub-tabs-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+.sub-tab-btn {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.sub-tab-btn.active {
+    background: #a94442;
+    color: white;
+    border-color: #a94442;
+}
+
+.sub-tab-btn[data-subtab="consultor"].active {
+    background: #31708f;
+    border-color: #31708f;
+}
+
+.sub-tab-content {
+    display: none;
+}
+
+.sub-tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
 /* Schedule Table */
 .schedule-table {
     width: 100%;
@@ -194,11 +233,40 @@ body {
 }
 
 /* Map Container */
-#map {
-    height: 400px;
+.map-container {
+    position: relative;
     width: 100%;
-    border-radius: 16px;
+}
+
+#map {
+    height: 500px;
+    width: 100%;
+    border-radius: 20px;
     border: 1px solid var(--border-color);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.map-info-btn {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    color: black;
+    padding: 12px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 10;
+}
+
+.map-info-btn:active {
+    transform: translateX(-50%) scale(0.95);
 }
 
 /* Notes Grid (Notepad style) */
@@ -228,10 +296,19 @@ body {
     margin-bottom: 0.5rem;
 }
 
-.note-content {
+.note-content-preview {
     color: var(--text-secondary);
     font-size: 0.95rem;
     white-space: pre-wrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Limit preview to 3 lines */
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.note-card:hover {
+    border-color: var(--accent-color);
 }
 
 .note-actions {
