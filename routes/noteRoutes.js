@@ -18,10 +18,26 @@ router.post('/', auth, async (req, res) => {
   try {
     const note = new Note({
       userId: req.user.id,
+      title: req.body.title,
       content: req.body.content
     });
     const newNote = await note.save();
     res.status(201).json(newNote);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// UPDATE a note
+router.put('/:id', auth, async (req, res) => {
+  try {
+    const note = await Note.findOneAndUpdate(
+      { _id: req.params.id, userId: req.user.id },
+      { title: req.body.title, content: req.body.content },
+      { new: true }
+    );
+    if (!note) return res.status(404).json({ message: 'Anotação não encontrada' });
+    res.json(note);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

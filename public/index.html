@@ -42,31 +42,57 @@
                     </div>
 
                     <div id="cronograma" class="tab-content active animate-fade">
-                        <div class="placeholder-view">
-                            <i class="fas fa-calendar-alt fa-2x mb-2"></i>
-                            <p>Seu Cronograma aparecerá aqui</p>
-                        </div>
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th>Horário</th>
+                                    <th>DeMolays:</th>
+                                    <th>Consultores:</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="schedule-time">07:00</td><td colspan="2">Credenciamento e Café da Manhã</td></tr>
+                                <tr><td class="schedule-time">08:30</td><td colspan="2">Abertura Ritualística</td></tr>
+                                <tr><td class="schedule-time">09:00</td><td colspan="2">Ordem dos Escudeiros</td></tr>
+                                <tr><td class="schedule-time">09:20</td><td colspan="2">Estrutura do Grande Conselho Estadual</td></tr>
+                                <tr><td class="schedule-time">09:30</td><td colspan="2">Situação da DeMolay SP</td></tr>
+                                <tr><td class="schedule-time">10:30</td><td>Sobre o Gabinete Estadual</td><td>Momento com a Diretoria Executiva</td></tr>
+                                <tr><td class="schedule-time">11:00</td><td>Alimentando uma Causa</td><td>Palestra sobre Honrarias e Prêmios</td></tr>
+                                <tr><td class="schedule-time">11:30</td><td>Momento sobre a Cavalaria</td><td>Legislação DeMolay</td></tr>
+                                <tr><td class="schedule-time">12:00</td><td colspan="2">Secretaria e Almoço</td></tr>
+                                <tr><td class="schedule-time">13:30</td><td>Quiz e Grande Capítulo</td><td>Estrutura da Ordem DeMolay</td></tr>
+                                <tr><td class="schedule-time">14:30</td><td colspan="2">Encerramento Ritualístico</td></tr>
+                                <tr><td class="schedule-time">15:00</td><td colspan="2">Entretenimento</td></tr>
+                                <tr><td class="schedule-time">16:00</td><td colspan="2">Café da Tarde</td></tr>
+                            </tbody>
+                        </table>
                     </div>
 
                     <div id="mapa" class="tab-content animate-fade">
-                        <div class="placeholder-view">
-                            <i class="fas fa-map-marked-alt fa-2x mb-2"></i>
-                            <p>Mapa de Unidades</p>
-                        </div>
+                        <div id="map"></div>
                     </div>
                 </div>
 
                 <div id="page-anotacoes" style="display: none;">
-                    <div class="chat-container">
-                        <div id="notes-list" class="chat-messages">
-                            <!-- Messages will appear here -->
+                    <div id="notes-grid" class="notes-grid">
+                        <!-- Notes will appear here -->
+                    </div>
+                    <button id="add-note-btn" class="fab">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+
+                <!-- Note Modal -->
+                <div id="note-modal" class="modal">
+                    <div class="modal-content animate-fade">
+                        <h2 class="modal-title" id="modal-title-text">Nova Anotação</h2>
+                        <input type="hidden" id="edit-note-id">
+                        <input type="text" id="note-title-input" class="modal-input" placeholder="Título">
+                        <textarea id="note-content-input" class="modal-textarea" placeholder="Sua anotação..."></textarea>
+                        <div class="modal-btns">
+                            <button id="cancel-note-btn" class="btn-secondary">Cancelar</button>
+                            <button id="save-note-btn" class="btn-primary">Salvar</button>
                         </div>
-                        <form id="note-form" class="chat-input-area">
-                            <input type="text" id="note-input" class="chat-input" placeholder="Escreva uma anotação..." required>
-                            <button type="submit" class="send-btn">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
-                        </form>
                     </div>
                 </div>
             </main>

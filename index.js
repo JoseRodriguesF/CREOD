@@ -17,6 +17,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 2. Health Check
 app.get('/api/ping', (req, res) => res.send('pong'));
 
+// Configuração Pública (API Keys)
+app.get('/api/config', (req, res) => {
+  res.json({
+    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
+  });
+});
+
 // 3. Middlewares
 app.use(express.json());
 app.use(cookieParser());
