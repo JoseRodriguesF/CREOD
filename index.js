@@ -41,21 +41,34 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // MongoDB Connection
+mongoose.set('bufferCommands', false); // Desativa o buffering global
+
+let isConnected = false;
 const connectDB = async () => {
+  if (isConnected) return;
+  
   if (!process.env.MONGODB_URI) {
     console.warn('⚠️ MONGODB_URI não encontrada.');
     return;
   }
+  
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      serverSelectionTimeoutMS: 5000
+    const db = await mongoose.connect(process.env.MONGODB_URI, {
+      serverSelectionTimeoutMS: 5000,
+      connectTimeoutMS: 10000,
     });
+    isConnected = db.connections[0].readyState;
     console.log('✅ Conectado ao MongoDB Atlas');
   } catch (err) {
     console.error('❌ Erro MongoDB:', err.message);
   }
 };
-connectDB();
+
+// Middleware para garantir conexão em cada request (útil na Vercel)
+app.use(async (req, res, next) => {
+  await connectDB();
+  next();
+});
 
 // 4. Rotas de API
 const unitRoutes = require('./routes/unitRoutes');
